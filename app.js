@@ -1,4 +1,14 @@
+function processActivity(activity){
+    const type = activity.type;
+    const displayName = activity.actor.display_login;
+    const repoName = activity.repo.name;
+    if(activity.type === 'CreateEvent'){
+        console.log(`${displayName} created a ${activity.payload.ref_type} named ${activity.payload.ref} on repository ${repoName}`);
+        return;
+    }
+    console.log("the event is not create");
 
+}
 async function main(){ 
     let args = process.argv;
     if(args.length < 4 || args[2] !== "github-activity"){
@@ -16,7 +26,9 @@ async function main(){
             return;
         }
 
-        console.log(`The recent activity is : \n`, recentActivity);
+        recentActivity.forEach((activity, index) => {
+            processActivity(activity);
+        });
     } catch(err){
         console.log(`There is an error : ${err.message}`);
     }
