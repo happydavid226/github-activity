@@ -2,12 +2,23 @@ function processActivity(activity){
     const type = activity.type;
     const displayName = activity.actor.display_login;
     const repoName = activity.repo.name;
-    if(activity.type === 'CreateEvent'){
-        console.log(`${displayName} created a ${activity.payload.ref_type} named ${activity.payload.ref} on repository ${repoName}`);
-        return;
-    }
-    console.log("the event is not create");
-
+    switch(activity.type){
+        case 'CreateEvent':
+            console.log(`${displayName} created a ${activity.payload.ref_type} named ${activity.payload.ref} on repository ${repoName}`);
+            return;
+        break;
+        case 'DeleteEvent':
+            console.log(`${displayName} deleted a ${activity.payload.ref_type} named ${ref} on repository ${repoName}`);
+            break;
+        case 'DiscussionEvent':
+            console.log(`${displayName} started a discussion on repository ${repoName}.\nMore details`, activity.payload.action, activity.payload.discussion);
+            break;
+        case 'ForkEvent':
+            console.log(`${displayName} forked ${repoName} whose owner is ${repoName.split('/')[0]}`);
+            break;
+        default: 
+        console.log(`The activity is not yet included`);
+    }   
 }
 async function main(){ 
     let args = process.argv;
